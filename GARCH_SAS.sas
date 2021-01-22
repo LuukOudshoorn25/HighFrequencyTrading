@@ -4,11 +4,11 @@ data dailyreturns_squared;
     squared = return**2;
 run;
 proc gplot data=dailyreturns_squared;
-      plot squared*num;
+      plot squared*VAR1;
    run;
 quit;
 
-   proc autoreg data = dailyreturns ;
+   proc autoreg data = dailyreturns outset=garch11;
     /* Estimate GARCH(1,1) with normally distributed residuals with AUTOREG*/
       model return = / garch = ( q=1,p=1 ) ;
    run ;
@@ -40,7 +40,7 @@ quit;
       model return = / garch=( q=3, p=3 ) dist = t ;
    run ;
    quit;
-
+ 
    /* Estimate GARCH(1,1) with generalized error distribution residuals */
    proc model data = dailyreturns ;
       parms nu 2 arch0 .1 arch1 .2 garch1 .75;
@@ -97,6 +97,132 @@ quit;
 
 
 
+
+
+
+
+/* Now with std errors*/
+      proc autoreg data= dailyreturns outest = uit1 covout;
+      model return =  /  garch=( p=1, q=1,  mean = sqrt);
+   run;
+   quit;
+data std_err1 ; 
+  Length Model $10. ; Model = 'GARCH1_1'; 
+  set uit1; 
+  if _name_ = 'ARCH0'   then DO; PARM = _AH_0   ; std_err = sqrt(_AH_0  ) ; END; 
+  if _name_ = 'ARCH1'   then DO; PARM = _AH_1   ; std_err = sqrt(_AH_1  ) ; END; 
+  if _name_ = 'GARCH1'  then DO; PARM = _GH_1   ; std_err = sqrt(_GH_1  ) ; END; 
+  if _name_ = 'DELTA'   then DO; PARM = _Delta_ ; std_err = sqrt(_Delta_) ; END; 
+
+  if std_err ne . ; 
+  Keep Model _name_ std_err _STATUS_ pARM;
+run ; 
+
+      /* Estimate GARCH-M Model with PROC AUTOREG */
+   proc autoreg data= dailyreturns outest = uit2 covout;
+      model return =  /  garch=( p=2, q=2,  mean = sqrt) maxITER=500;
+   run;
+   quit;
+data std_err2 ; 
+  Length Model $10. ; Model = 'EGARCH2_2'; 
+  set uit2; 
+  if _name_ = 'ARCH0'   then DO; PARM = _AH_0  ; std_err = sqrt(_AH_0)   ; END;
+  if _name_ = 'ARCH1'   then DO; PARM = _AH_1  ; std_err = sqrt(_AH_1)   ; END;
+  if _name_ = 'ARCH2'   then DO; PARM = _AH_2  ; std_err = sqrt(_AH_2)   ; END;
+  if _name_ = 'GARCH1'  then DO; PARM = _GH_1  ; std_err = sqrt(_GH_1)   ; END;
+  if _name_ = 'GARCH2'  then DO; PARM = _GH_2  ; std_err = sqrt(_GH_2)   ; END;
+  if _name_ = 'DELTA'   then DO; PARM = _DeltA_; std_err = sqrt(_Delta_) ; END;
+
+  if std_err ne . ; 
+  Keep Model _STATUS_ _name_ std_err pARM;
+run ; 
+
+/* Estimate GARCH-M Model with PROC AUTOREG */
+   proc autoreg data= dailyreturns outest = uit3 covout;
+      model return =  /  garch=( p=3, q=3,  mean = sqrt) maxITER=100;
+   run;
+   quit;
+data std_err3 ; 
+  Length Model $10. ; Model = 'GARCH3_3'; 
+  set uit3; 
+  if _name_ = 'ARCH0'   then DO; PARM = _AH_0  ; std_err = sqrt(_AH_0  ) ; END;  
+  if _name_ = 'ARCH1'   then DO; PARM = _AH_1  ; std_err = sqrt(_AH_1  ) ; END;  
+  if _name_ = 'ARCH2'   then DO; PARM = _AH_2  ; std_err = sqrt(_AH_2  ) ; END;  
+  if _name_ = 'ARCH3'   then DO; PARM = _AH_3  ; std_err = sqrt(_AH_3  ) ; END;  
+  if _name_ = 'GARCH1'  then DO; PARM = _GH_1  ; std_err = sqrt(_GH_1  ) ; END;  
+  if _name_ = 'GARCH2'  then DO; PARM = _GH_2  ; std_err = sqrt(_GH_2  ) ; END;  
+  if _name_ = 'GARCH3'  then DO; PARM = _GH_3  ; std_err = sqrt(_GH_3  ) ; END;  
+  if _name_ = 'DELTA'   then DO; PARM = _Delta_; std_err = sqrt(_Delta_) ; END;  
+
+  if std_err ne . ; 
+  Keep Model _STATUS_ _name_ std_err pARM;
+run ; 
+
+
+   /* Estimate EGARCH Model with PROC AUTOREG */
+   proc autoreg data= dailyreturns outest = uit4 covout;
+      model return =  / garch=( q=1, p=1 , type = exp) ;
+   run;
+   quit;
+data std_err4 ; 
+  Length Model $10. ;  Model = 'EGARCH1_1'; 
+  set uit4; 
+  if _name_ = 'EARCH0'   then DO; PARM = _AH_0  ; std_err = sqrt(_AH_0  ) ; END;   
+  if _name_ = 'EARCH1'   then DO; PARM = _AH_1  ; std_err = sqrt(_AH_1  ) ; END;   
+  if _name_ = 'EGARCH1'  then DO; PARM = _GH_1  ; std_err = sqrt(_GH_1  ) ; END;   
+  if _name_ = 'THETA'    then DO; PARM = _THETA_; std_err = sqrt(_THETA_) ; END;   
+
+  if std_err ne . ; 
+  Keep Model _name_ std_err _STATUS_ PARM;
+run ; 
+   /* Estimate EGARCH Model with PROC AUTOREG */
+   proc autoreg data= dailyreturns outest = uit5 covout;
+      model return =  / garch=( q=2, p=2 , type = exp) ;
+   run;
+   quit;   
+data std_err5 ; 
+  Length Model $10. ;  Model = 'EGARCH2_2'; 
+  set uit5; 
+  if _name_ = 'EARCH0'   then DO; PARM = _AH_0  ; std_err = sqrt(_AH_0  ) ; END;   
+  if _name_ = 'EARCH1'   then DO; PARM = _AH_1  ; std_err = sqrt(_AH_1  ) ; END;   
+  if _name_ = 'EARCH2'   then DO; PARM = _AH_2  ; std_err = sqrt(_AH_2  ) ; END;   
+  if _name_ = 'EGARCH1'  then DO; PARM = _GH_1  ; std_err = sqrt(_GH_1  ) ; END;   
+  if _name_ = 'EGARCH2'  then DO; PARM = _GH_2  ; std_err = sqrt(_GH_2  ) ; END;   
+  if _name_ = 'THETA'    then DO; PARM = _THETA_; std_err = sqrt(_THETA_) ; END;   
+
+  if std_err ne . ; 
+  Keep Model _name_ std_err _STATUS_ PARM;
+run ; 
+   /* Estimate EGARCH Model with PROC AUTOREG */
+   proc autoreg data= dailyreturns outest = uit6 covout;
+      model return =  / garch=( q=3, p=3 , type = exp) maxITER=100;
+   run;
+   quit;
+data std_err6 ; 
+  Length Model $10. ;  Model = 'EGARCH3_3'; 
+  set uit6; 
+  if _name_ = 'EARCH0'   then DO; PARM = _AH_0  ; std_err = sqrt(_AH_0  ) ; END;   
+  if _name_ = 'EARCH1'   then DO; PARM = _AH_1  ; std_err = sqrt(_AH_1  ) ; END;   
+  if _name_ = 'EARCH2'   then DO; PARM = _AH_2  ; std_err = sqrt(_AH_2  ) ; END;   
+  if _name_ = 'EARCH3'   then DO; PARM = _AH_3  ; std_err = sqrt(_AH_3  ) ; END;   
+  if _name_ = 'EGARCH1'  then DO; PARM = _GH_1  ; std_err = sqrt(_GH_1  ) ; END;   
+  if _name_ = 'EGARCH2'  then DO; PARM = _GH_2  ; std_err = sqrt(_GH_2  ) ; END;   
+  if _name_ = 'EGARCH3'  then DO; PARM = _GH_3  ; std_err = sqrt(_GH_3  ) ; END;   
+  if _name_ = 'THETA'    then DO; PARM = _THETA_; std_err = sqrt(_THETA_) ; END;   
+
+  if std_err ne . ; 
+  Keep Model _name_ std_err _STATUS_ PARM;
+run ; 
+
+DATA ALLES ; 
+   SET std_err1 std_err2 std_err3 std_err4 std_err5 std_err6 ;
+RUN ; 
+
+/*END witj STD errors*/
+
+
+
+
 /* Now all of the family */
 
 
@@ -119,8 +245,6 @@ ods output Autoreg.egarch_1_2.FinalModel.Results.FitSummary
            =fitsum_egarch_1_2;
 ods output Autoreg.egarch_2_1.FinalModel.Results.FitSummary
            =fitsum_egarch_2_1;
-ods output Autoreg.egarch_2_2.FinalModel.Results.FitSummary
-           =fitsum_egarch_2_2;
 
 ods output Autoreg.qgarch_1_1.FinalModel.Results.FitSummary
            =fitsum_qgarch_1_1;
@@ -143,7 +267,7 @@ ods output Autoreg.tgarch_2_2.FinalModel.Results.FitSummary
 
    /* Estimating multiple GARCH-type models */
 title "GARCH family";
-proc autoreg data=dailyreturns outest=garch_family;
+proc autoreg data=dailyreturns outest=garch_family COVOUT  maxiter=1000 ;
    garch_1_1 :      model return = / noint garch=(p=1,q=1);
    garch_1_2 :      model return = / noint garch=(p=1,q=1);
    garch_2_2 :      model return = / noint garch=(p=1,q=2);
@@ -152,7 +276,7 @@ proc autoreg data=dailyreturns outest=garch_family;
    egarch_1_1 :     model return = / noint garch=(p=1,q=1,type=egarch);
    egarch_1_2 :     model return = / noint garch=(p=1,q=2,type=egarch);
    egarch_2_1 :     model return = / noint garch=(p=2,q=1,type=egarch);
-   egarch_2_2 :     model return = / noint garch=(p=2,q=2,type=egarch);
+   */egarch_2_2 :     model return = / noint garch=(p=2,q=2,type=egarch);
    
    qgarch_1_1 :     model return = / noint garch=(p=1,q=1,type=qgarch);
    qgarch_1_2 :     model return = / noint garch=(p=1,q=2,type=qgarch);
@@ -224,3 +348,78 @@ proc print data=tr;
    format _NUMERIC_ BEST12.4;
 run;
 title;
+
+
+
+/* Now we will try RealGARCH! */
+/* Estimate RealGARCH(1,1) with generalized error distribution residuals */
+
+
+
+
+/* Estimate RealGARCH Model with PROC MODEL */
+proc model data = dailyreturns ;
+   parms earch0 .1 earch1 .2 egarch1 .75;
+   /* mean model */
+   return = intercept ;
+   /* variance model */
+   if (_obs_ = 1 ) then
+      h.return = exp( earch0 + egarch1 * log(mse.return)  );
+   else h.return = exp(earch0 + earch1*zlag(nresid.logRV) + egarch1*log(zlag(h.return))) ;
+   /* fit the model */
+   fit return / fiml method = marquardt ;
+run;
+quit;
+
+
+   /* Estimate EGARCH Model with PROC AUTOREG */
+   proc autoreg data= dailyreturns ;
+      model return =  / garch=( q=1, p=1 , type = exp) ;
+   run;
+   quit;
+
+
+
+
+   /* Estimate EGARCH Model with PROC MODEL */
+   proc model data = dailyreturns ;
+      parms  earch0 .1 earch1 .2 egarch1 .75;
+      /* mean model */
+      return = intercept ;
+      /* variance model */
+      if (_obs_ = 1 ) then
+         h.return = exp( earch0 + egarch1 * log(mse.return)  );
+      else h.return = exp(earch0 + earch1*zlag(g) + egarch1*log(zlag(h.return))) ;
+      g = (logRV) + 0.000000000000000000000000000000000000000001*abs(-nresid.return) ;
+      /* fit the model */
+      fit return / fiml method = marquardt ;
+   run;
+   quit;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+proc summary data=dailyreturns;
+   var return ;
+   output out=uit stddev=;
+run;
+proc sql;
+   select return into :stdev from uit;
+run;
+%put &stdev;
+data uit;
+   set uit;
+   put return=;
+run;
