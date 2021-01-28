@@ -8,6 +8,34 @@ proc gplot data=dailyreturns_squared;
    run;
 quit;
 
+
+
+proc autoreg data=dailyreturns outest=garch_family COVOUT  maxiter=1000 ;
+   garch_1_1 :      model return = / noint garch=(p=1,q=1);
+   egarch_1_1 :     model return = / noint garch=(p=1,q=1,type=egarch);
+   qgarch_1_1 :     model return = / noint garch=(p=1,q=1,type=qgarch);
+   tgarch_1_1 :     model return = / noint garch=(p=1,q=1,type=tgarch);
+   garchm_1_1 :     model return = / noint garch=(p=1,q=1,mean=log);
+run;
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    proc autoreg data = dailyreturns outset=garch11;
     /* Estimate GARCH(1,1) with normally distributed residuals with AUTOREG*/
       model return = / garch = ( q=2,p=1 ) ;
