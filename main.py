@@ -4,7 +4,8 @@
 ###             Compatible with standard python3                ###
 ###      Note: most of the scripts run in parallel. This        ###
 ###        might cause some problems in case this is not        ###
-###           available on the host machine when running        ###
+###           available on the host machine when running.       ###
+###            For the RNN part, one needs a working GPU        ###
 ###                                                             ###
 ###################################################################
 

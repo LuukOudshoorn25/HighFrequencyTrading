@@ -1,4 +1,14 @@
-from scipy.optimize import minimize
+###################################################################
+###                                                             ###
+###    File composed by Luuk Oudshoorn on behalf of group 18    ###
+###             Compatible with standard python3                ###
+###      Note: most of the scripts run in parallel. This        ###
+###        might cause some problems in case this is not        ###
+###           available on the host machine when running.       ###
+###            For the RNN part, one needs a working GPU        ###
+###                                                             ###
+###################################################################
+
 from scipy.optimize import minimize
 import numpy as np
 import pandas as pd
