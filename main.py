@@ -46,7 +46,7 @@ from specialgarch import special_GARCH, specialGARCH_predict
 from neuralnet import RNN
 
 # Load stylesheet for fancy plotting
-plt.style.use('MNRAS_stylesheet')
+plt.style.use('./datafiles/MNRAS_stylesheet')
 
 # Load high frequency data
 if not handin:
