@@ -36,11 +36,11 @@ class special_GARCH():
         
     def init_data(self):
         if not self.maxdate:
-            df = pd.read_hdf('daily_returns.h5')
+            df = pd.read_hdf('./datafiles/daily_returns.h5')
             self.datetimes = df.index
             self.closingreturns = df.values.flatten()*100
         else: 
-            df = pd.read_hdf('daily_returns.h5')['2015':self.maxdate]
+            df = pd.read_hdf('./datafiles/daily_returns.h5')['2015':self.maxdate]
             self.datetimes = df.index
             self.closingreturns = df.values.flatten()*100
         self.__RVOL__()
@@ -48,7 +48,7 @@ class special_GARCH():
     def __RVOL__(self):
         """Obtain realized volatilities from highfreq data"""
         # Convert to logprices
-        self.RVOL = pd.read_hdf('RVOL_parallel_GARCH.hdf')
+        self.RVOL = pd.read_hdf('./datafiles/RVOL_parallel_GARCH.hdf')
         # Daily returns do not have first day and no weekends, so drop them
 #         if self.maxdate:
 #             self.RVOL = self.RVOL['2015':self.maxdate]

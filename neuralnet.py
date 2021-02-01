@@ -69,7 +69,7 @@ class RNN():
         np.random.seed(1234)
 
         # load the data
-        RVOL = np.sqrt(252*pd.read_pickle('asml_RK.pickle'))
+        RVOL = np.sqrt(252*pd.read_pickle('./datafiles/asml_RK.pickle'))
 
         # convert the vector to a 2D matrix
         matrix_RVOL = self.tomatrix(RVOL.values.flatten(), sequence_length)

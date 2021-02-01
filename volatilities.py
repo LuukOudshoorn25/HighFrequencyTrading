@@ -156,11 +156,11 @@ class realized_kernel():
     def worker(self,day,H=None,get_H=False,ret_gamma1=False):
         """worker to loop over days"""
         try:
-            daily_counts = pd.read_hdf('../days.h5')
+            daily_counts = pd.read_hdf('./datafiles/days.h5')
             counts = daily_counts.loc[day].iloc[0]
             # to be faster: find where we are approximately
             iloc0 = max(int(daily_counts.loc[:day].sum().iloc[0]-counts)-10000,0)
-            hdf_df = pd.read_hdf('../data.h5')
+            hdf_df = pd.read_hdf('./datafiles/data.h5')
             
             oneday = hdf_df.iloc[iloc0:counts+iloc0+10000].loc[day]
             # get regular and irregular dfs
@@ -192,8 +192,8 @@ class realized_kernel():
             return np.nan
     def iterate_over_days(self):
         # Get unique days in dataset
-        daily_counts = pd.read_hdf('../days.h5')
-        df = pd.read_hdf('../data.h5')
+        daily_counts = pd.read_hdf('./datafiles/days.h5')
+        df = pd.read_hdf('./datafiles/data.h5')
         days = daily_counts.index[(daily_counts>0).values.flatten()]
         days = [w.strftime('%Y-%m-%d') for w in days]
         # iterate over days
@@ -220,11 +220,11 @@ class realized_kernel():
         #plt.scatter(H_opt,obtain_K(H_opt),color='red',s=2)
         
         
-        daily_counts = pd.read_hdf('../days.h5')
+        daily_counts = pd.read_hdf('./datafiles/days.h5')
         counts = daily_counts.loc[day].iloc[0]
         # to be faster: find where we are approximately
         iloc0 = max(int(daily_counts.loc[:day].sum().iloc[0]-counts)-1000,0)
-        hdf_df = pd.read_hdf('../data.h5')
+        hdf_df = pd.read_hdf('./datafiles/data.h5')
         oneday = hdf_df.iloc[iloc0:counts+iloc0+1000].loc[day]
         
         

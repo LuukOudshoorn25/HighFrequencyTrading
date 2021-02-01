@@ -76,7 +76,7 @@ def plot_all(daily_returns):
 
 
 def plot_RK_ASML_vs_index(RK_values):
-    data = pd.read_csv('oxfordmanrealizedvolatilityindices.csv')
+    data = pd.read_csv('./datafiles/oxfordmanrealizedvolatilityindices.csv')
     #get S&P500 index
     SP = data.loc[data['Symbol'] == '.AEX'] #.AEX
     SP = SP.rename(columns = {'Unnamed: 0': 'DATETIME'})

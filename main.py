@@ -53,24 +53,24 @@ if not handin:
     # Check if the data is already there
     try:
         # Maybe the large pickle file?
-        df = pd.read_pickle('ASML_2015_2020.pickle')
+        df = pd.read_pickle('./datafiles/ASML_2015_2020.pickle')
     except:
         try:
             # Maybe the two CSVs?
-            df = pd.concat([pd.read_csv(w) for w in ['df.part1.csv','df.part2.csv']])
+            df = pd.concat([pd.read_csv(w) for w in ['./datafiles/df.part1.csv','./datafiles/df.part2.csv']])
         except:
             # Ok, none. Lets read in the data from the raw files
             reader = datacleaner()
             df = reader.get_df()
 
 # Load highfreq data for COVID day
-df_highres_covid = pd.read_pickle('highres_covid.pickle')
+df_highres_covid = pd.read_pickle('./datafiles/highres_covid.pickle')
 
 # Convert to daily data
 # Check if the data is already there
 try:
-    daily_returns = pd.read_hdf('./daily_returns.h5')
-    closingprices  = pd.read_pickle('./closingprices.pickle')
+    daily_returns = pd.read_hdf('./datafiles/daily_returns.h5')
+    closingprices  = pd.read_pickle('./datafiles/closingprices.pickle')
 except:
     daily_returns,closingprices = makedaily(df)
 
@@ -81,13 +81,13 @@ if plot:
 
 # Obtain realized kernel
 if handin:
-    RK_values = pd.read_pickle('./asml_RK.pickle')
+    RK_values = pd.read_pickle('./datafiles/asml_RK.pickle')
 if not handin:
     RK = realized_kernel(df)
     RK_values,gamma_1s = RK.iterate_over_days()
     RK_values = RK_values.set_index('Day')
     RK_values.index = pd.to_datetime(RK_values.index)
-    RK_values.to_pickle('./asml_RK.pickle')
+    RK_values.to_pickle('./datafiles/asml_RK.pickle')
 
 
  #Plot ASML vs index

@@ -25,7 +25,7 @@ class lin_loglin_realgarch():
         self.activation = activation
         # store the maxdata parameter for if we do predictions
         
-        df = pd.read_hdf('daily_returns.h5')
+        df = pd.read_hdf('./datafiles/daily_returns.h5')
         
         self.datetimes = df.index
         self.closingreturns = df.values.flatten()*100
@@ -38,7 +38,7 @@ class lin_loglin_realgarch():
     def __RVOL__(self):
         """Obtain realized volatilities from highfreq data"""
         # Convert to logprices
-        self.RVOL = pd.read_hdf('RVOL_parallel_GARCH.hdf')
+        self.RVOL = pd.read_hdf('./datafiles/RVOL_parallel_GARCH.hdf')
         # Daily returns do not have first day and no weekends, so drop them
         self.RVOL = self.RVOL.dropna().values.flatten()[1:]
         #self.RVOL = RK_values.values.flatten()[1:]

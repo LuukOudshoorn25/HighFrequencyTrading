@@ -23,7 +23,7 @@ class datacleaner():
     def __init__(self):
         tstart=time.time()
         # Get list of all files
-        flist = glob('./ASML/*csv')
+        flist = glob('./datafiles/ASML/*csv')
         # Parallel read the files
         dfs= Parallel(n_jobs=8)(delayed(pd.read_csv)(i) for i in flist)
         print("Lengths",[len(w) for w in dfs])
@@ -91,8 +91,8 @@ class datacleaner():
         
     def write(self):
         # Write to pickle files
-        self.df.to_pickle('ASML_2015_2020.pickle')
-        self.hourly.to_pickle('ASML_hourly.pickle')
+        self.df.to_pickle('./datafiles/ASML_2015_2020.pickle')
+        self.hourly.to_pickle('./datafiles/ASML_hourly.pickle')
     
     def get_df(self):
         return self.df

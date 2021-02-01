@@ -27,12 +27,12 @@ class estimate_GAS():
         
         self.maxdate = maxdate
         if not maxdate:
-            df = pd.read_hdf('daily_returns.h5')
+            df = pd.read_hdf('./datafiles/daily_returns.h5')
             all_returns = df.copy()
             self.datetimes = df.index
             self.closingreturns = df.values.flatten()
         else: 
-            df = pd.read_hdf('daily_returns.h5')
+            df = pd.read_hdf('./datafiles/daily_returns.h5')
             all_returns = df.copy()
             df = df[:self.maxdate]
             self.datetimes = df.index
