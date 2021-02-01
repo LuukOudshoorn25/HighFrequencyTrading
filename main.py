@@ -10,29 +10,13 @@
 ###################################################################
 
 # Set this to True to work only on daily data
-handin=False
-plot=False
+handin=True
+plot=True
 # Import some of the required libraries
 import numpy as np
 import pandas as pd
-from glob import glob
-from scipy.optimize import minimize, approx_fprime
-from scipy.special import gamma, factorial, polygamma
-from scipy import special
-from joblib import Parallel, delayed
-from sklearn.metrics import mean_absolute_error, mean_squared_error,r2_score
 import matplotlib.pyplot as plt
-import scipy
-import matplotlib.dates as mdates
-import os
-import sys
-import corner
-import time
-from multiprocessing import Pool
-import datetime
-# stuff for mcmc simulations
-import emcee
-import corner
+
 
 # Import codefiles (our own subfiles)
 from datalib import datacleaner, makedaily
