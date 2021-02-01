@@ -349,7 +349,6 @@ def real_tGAS(daily_returns,RK_values):
 
     est = optim()
     est = dict(zip(parkeys,est))
-    plt.plot(model(est,annual=True),lw=1)
     return model(est,annual=True)
 
 
@@ -402,7 +401,6 @@ def real_GGAS(daily_returns,RK_values):
 
     est = optim()
     est = dict(zip(parkeys,est))
-    plt.plot(model(est,annual=True),lw=1)
     return model(est,annual=True)
 
 
