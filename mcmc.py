@@ -123,6 +123,7 @@ class emcee_class():
             axes[i].plot(self.chain[:, :, i].transpose(), color='black', alpha=0.3)
             axes[i].axvline(100, ls='dashed', color='red')
         axes[0].axvline(100, ls='dashed', color='red')
+        plt.show()
     
     def results(self):
         # Cut of burn in period and get median and errors

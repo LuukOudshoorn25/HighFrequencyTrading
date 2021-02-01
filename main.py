@@ -153,13 +153,17 @@ xt_vs_ht(m_lin, m_loglin,RK_values)
 # Run MCMC Monte Carlo / Bayesian fitting
 # If handin is set, a very small MCMC is run (still it should take 30 sec or so on 22 cores and thus longer on another machine )
 EC = emcee_class(daily_returns,fittedGARCHES, fittedRealGARCHES,modeltype='GARCH22',handin=True)
+# Make corner plot
 EC.__corner__()
+# plot chains
 EC.__chains__()
 
 
 EC = emcee_class(daily_returns,fittedGARCHES, fittedRealGARCHES,modeltype='EGARCH11',handin=True)
 EC.__corner__()
+# Make corner plot for EGARCH
 EC.__chains__()
+# plot chains
 
 
 # Estimate GAS model
@@ -175,12 +179,12 @@ if not handin:
     scores_GAS
 
 
-# Estimate real GAS
+# Estimate real GAS models. We have seperate functions for these
 fitted_tgas = real_tGAS(daily_returns, RK_values)
 fitted_ggas = real_GGAS(daily_returns, RK_values)
 fitted_skewtgas = real_skewedtGAS(daily_returns, RK_values)
 
-# Plot the results
+# Plot the results altoghether. Pass all arguments to the plotting class
 plot_GASestimates(model1, model2, model3, RK_values, fitted_tgas, fitted_ggas, fitted_skewtgas)
 
 # Get baseline prediction
@@ -202,6 +206,7 @@ for m in ['E','Q','M','T']:
     predictor = specialGARCH_predict(RK_values,daily_returns,m, real=False)
     predictor.sim_fit(quick=True)
     scores_specialGARCH = predictor.get_scores()
+    # Save results in a list to concat later
     results.append(scores_specialGARCH)
 
 print(pd.concat(results))
