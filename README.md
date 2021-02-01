@@ -3,6 +3,7 @@ This repo contains all work on the High frequency trading project. In the main.p
 
 
 Instructions:
+All code was already set to dummy mode, with less iterations to speed things up a bit
 1) Obviously, git pull the repo, the dev(elopment) and papers folders can be ignored
 2) run the main.py file in python3 from the root directory. For example: 
         python3 main.py
