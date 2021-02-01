@@ -38,7 +38,7 @@ from datalib import datacleaner, makedaily
 from plottinglib import plot_one_day,plot_all, plot_RK_ASML_vs_index, compare_RV_RK, return_dist, plot_GARCHestimates, xt_vs_ht, plot_GASestimates
 from volatilities import realized_kernel, RV, signature_plot
 from GARCH import estimate_GARCH, parallel_GARCH_fitter, GARCH_RealGARCH_predict,make_GARCH_prediction_table
-from log_lin_activation import plot_GARCHestimates,  lin_loglin_realgarch
+from log_lin_activation import plot_GARCHestimates_loglin,  lin_loglin_realgarch
 from mcmc import emcee_class
 from GAS import estimate_GAS, GAS_RealGAS_predict, real_skewedtGAS, real_GGAS, real_tGAS
 from baseline import baseline_predict
@@ -145,7 +145,7 @@ make_GARCH_prediction_table(scores_GARCH,scores_RealGARCH,predictor)
 m_lin = lin_loglin_realgarch('linear')
 m_loglin = lin_loglin_realgarch('log-linear')
 # Plot the results
-plot_GARCHestimates(m_lin, m_loglin)
+plot_GARCHestimates_loglin(m_lin, m_loglin)
 # Plot xt vs ht
 xt_vs_ht(m_lin, m_loglin,RK_values)
 

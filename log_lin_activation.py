@@ -44,6 +44,7 @@ class lin_loglin_realgarch():
         #self.RVOL = RK_values.values.flatten()[1:]
     
     def __llik_fun_GARCH__(self,params,estimate=True):
+        """Return either the negative log likelihood in case of estimate (bool) or return sigma2 for fitted model"""
         x = self.closingreturns
         n = len(x)
         # Convert parameters back from their log normalization
@@ -80,8 +81,10 @@ class lin_loglin_realgarch():
     
     
     def fit_garch(self,x):
+        """Standard minimizer to fit the GARCH model, with either one of the activtation fuinctions"""
         # Initialize values
         a,b = 0.1,0.4
+        # do a logistic transformation for non negative params
         alpha = np.log(a/(1-a))
         beta = np.log(b/(1-b))
         omega = np.nanvar(self.closingreturns)*(1-a-b)
@@ -116,7 +119,8 @@ class lin_loglin_realgarch():
 
 
 
-def plot_GARCHestimates(m_lin, m_loglin):
+def plot_GARCHestimates_loglin(m_lin, m_loglin):
+    """Obtain estimates and plot all """
     RGARCHlin_x,RGARCHlin_y = m_lin.return_vola()
     RGARCHlog_x,RGARCHlog_y = m_loglin.return_vola()
     
