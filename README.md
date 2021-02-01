@@ -10,4 +10,5 @@ All code was already set to dummy mode, with less iterations to speed things up 
 
 3) The first plots will appear very soon. Afterwards, it will become slower as we need to fit many models and run the Bayesian / MCMC analysis
 4) Enjoy! :-)
+5) In the dev folder, there is also still some interesting SAS code and results that were used to verify our own approaches
 
