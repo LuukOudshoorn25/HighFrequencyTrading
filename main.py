@@ -10,7 +10,7 @@
 
 # Set this to True to work only on daily data
 handin=True
-plot=False
+plot=True
 # Import some of the required libraries
 import numpy as np
 import pandas as pd
@@ -151,7 +151,7 @@ xt_vs_ht(m_lin, m_loglin,RK_values)
 
 
 # Run MCMC Monte Carlo / Bayesian fitting
-# If handin is set, a very small MCMC is run (still it should take 20 sec or so on 22 cores. )
+# If handin is set, a very small MCMC is run (still it should take 30 sec or so on 22 cores and thus longer on another machine )
 EC = emcee_class(daily_returns,fittedGARCHES, fittedRealGARCHES,modeltype='GARCH22',handin=True)
 EC.__corner__()
 EC.__chains__()
