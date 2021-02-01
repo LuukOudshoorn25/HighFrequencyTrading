@@ -6,6 +6,7 @@
 ###        might cause some problems in case this is not        ###
 ###           available on the host machine when running.       ###
 ###            For the RNN part, one needs a working GPU        ###
+###                                                             ###
 ###################################################################
 import numpy as np
 import pandas as pd
@@ -31,6 +32,7 @@ import corner
 class realized_kernel():
     def __init__(self):
         """Initialize, call some functions"""
+        self.df = pd.read_hdf('./datafiles/data.h5')
         self.make_time_index()
         return
 
@@ -215,6 +217,7 @@ class realized_kernel():
         return self.RKvalues,gamma_1s
 
     def signature_plot(self,day):
+        df = self.df
         Hs = np.hstack((np.logspace(0.1,2.5,80,dtype=int),[None]))
         
         #K_Hs = [self.worker(day,H,False,True) for H in Hs]
@@ -236,10 +239,7 @@ class realized_kernel():
         hdf_df = pd.read_hdf('./datafiles/data.h5')
         oneday = hdf_df.iloc[iloc0:counts+iloc0+1000].loc[day]
         
-        
-        #regular_df, irregular_df = self.make_regular_df(oneday)
-        #sparse_IV = self.get_sparse_IV(regular_df)
-        sparse_IV = ((np.log(df.loc[day].resample('1T')[['PRICE']].median()).diff()*100)**2).sum().iloc[0]
+        sparse_IV = ((np.log(self.df.loc[day].resample('1T')[['PRICE']].median()).diff()*100)**2).sum().iloc[0]
         plt.axhline(sparse_IV,color='tomato',lw=0.7,label='Sparse volatility')
         plt.xlabel('Bandwidth')
         #plt.ylim(13,26)

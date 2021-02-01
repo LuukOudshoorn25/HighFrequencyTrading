@@ -10,8 +10,8 @@
 ###################################################################
 
 # Set this to True to work only on daily data
-handin=True
-plot=True
+handin=False
+plot=False
 # Import some of the required libraries
 import numpy as np
 import pandas as pd
@@ -54,7 +54,7 @@ if not handin:
     # Check if the data is already there
     try:
         # Maybe the large pickle file?
-        df = pd.read_pickle('./datafiles/ASML_2015_2020.pickle')
+        df = pd.read_hdf('./datafiles/data.h5')
     except:
         try:
             # Maybe the two CSVs?
@@ -84,7 +84,10 @@ if plot:
 if handin:
     RK_values = pd.read_pickle('./datafiles/asml_RK.pickle')
 if not handin:
-    RK = realized_kernel(df)
+    RK = realized_kernel()
+    # Plot the signature plot
+    RK.signature_plot('2017-05-26')
+    # Obtain RK values for all days
     RK_values,gamma_1s = RK.iterate_over_days()
     RK_values = RK_values.set_index('Day')
     RK_values.index = pd.to_datetime(RK_values.index)
